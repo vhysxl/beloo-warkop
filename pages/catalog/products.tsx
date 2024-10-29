@@ -1,7 +1,12 @@
+import Navigation from '@/components/navbar'
 import React from 'react'
 
 export default function products() {
   return (
-    <div>products</div>
+    <>
+      <Navigation />
+      <div>products</div>
+    </>
+
   )
 }

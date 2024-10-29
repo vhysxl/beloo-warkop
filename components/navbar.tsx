@@ -3,24 +3,18 @@ import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, Navba
 import ThemeSwitcher from "./switcher";
 import { CircleUser } from "lucide-react";
 
-export default function App() {
+export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const menuItems = [
-    "Home",
-    "Order Online",
-    "Activity",
-    "Analytics",
-    "System",
-    "Deployments",
-    "My Settings",
-    "Team Settings",
-    "Help & Feedback",
-    "Log Out",
+    { name: "Home", href: "/" },
+    { name: "Order Online", href: "/catalog/products" },
+    { name: "About Us", href: "/about/about" },
+
   ];
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen}>
+    <Navbar onMenuOpenChange={setIsMenuOpen} shouldHideOnScroll isBordered isBlurred={false}>
       {/* First NavbarContent with brand */}
       <NavbarContent>
         <NavbarBrand>
@@ -47,10 +41,10 @@ export default function App() {
         </NavbarItem>
       </NavbarContent>
 
-      {/* Last NavbarContent with login/signup and menu toggle */}
+
       <NavbarContent justify="end">
         <NavbarItem>
-          <Button as={Link} className="hidden lg:flex bg-[#C5A572] bg-opacity-50" href="/account/login" radius="full" variant="flat" startContent={<CircleUser />}>
+          <Button as={Link} className="hidden sm:flex bg-[#C5A572] bg-opacity-50" href="/account/login" radius="full" variant="flat" startContent={<CircleUser />}>
             Account
           </Button>
         </NavbarItem>
@@ -63,24 +57,34 @@ export default function App() {
         />
       </NavbarContent>
 
-      <NavbarMenu>
-        {menuItems.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
-            <Link
-              className={`w-full text-right ${index === 1
-                ? "text-[#C5A572]"
-                : index === menuItems.length - 1
-                  ? "text-danger"
-                  : "text-foreground"
-                }`}
-              href="#"
-              size="lg"
-            >
-              {item}
-            </Link>
-          </NavbarMenuItem>
-        ))}
+      <NavbarMenu >
+        <div className=" space-y-3">
+          {menuItems.map((item, index) => (
+            <NavbarMenuItem key={index}>
+              <Link
+                className="w-full text-right my-2 font-bold  transition-colors duration-200"
+                href={item.href}
+                size="lg"
+                color="foreground"
+              >
+                {item.name}
+              </Link>
+            </NavbarMenuItem>
+          ))}
+        </div>
+        <hr className="bg-neutral-600 mt-4 dark:bg-white"/>
+        <Button
+          as={Link}
+          color="warning"
+          className="w-full py-3 font-semibold  shadow-lg transition duration-200 mt-2"
+          href="/account/login"
+          >
+          Loginkan Le
+        </Button>
+
       </NavbarMenu>
+
+
     </Navbar>
   );
 }

@@ -16,7 +16,12 @@ module.exports = {
       },
       colors: {
         'beloo-primary': '#C5A572',
-      }
+      },
+      css: {
+        'html, body': {
+          'overflow-x': 'hidden',
+        },
+      },
     },
   },
   darkMode: "class",
