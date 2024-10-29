@@ -106,15 +106,15 @@ export default function TentangKamiBeloo() {
                     <div className="px-1 py-2">
                       <div className="flex items-center space-x-2 mb-2">
                         <Instagram className="text-[#C5A572]" />
-                        <a href="" className="hover:underline">@beleowarkop</a>
+                        <p  className="hover:underline">@beleowarkop</p>
                       </div>
                       <div className="flex items-center space-x-2 mb-2">
                         <Facebook className="text-[#C5A572]" />
-                        <a href="" className="hover:underline">Beloo Warkop</a>
+                        <p className="hover:underline">Beloo Warkop</p>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Twitter className="text-[#C5A572]" />
-                        <a href="" className="hover:underline">@BeleoWarkop</a>
+                        <p className="hover:underline">@BeleoWarkop</p>
                       </div>
                     </div>
                   </PopoverContent>
