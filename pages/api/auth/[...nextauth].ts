@@ -3,10 +3,11 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcrypt";
 import { sql } from "@vercel/postgres";
-import { signIn } from "next-auth/react";
 import { NextAuthOptions } from "next-auth";
 
 export const authOptions: NextAuthOptions = {
+    secret: process.env.NEXTAUTH_SECRET,
+    
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_ID!,
