@@ -1,9 +1,21 @@
 import React from 'react'
 import Navigation from '@/components/navbar'
+import { Button, Card, CardBody, CardFooter, CardHeader, Image, Link } from "@nextui-org/react";
+import { useSession } from "next-auth/react";
+import { useRouter } from 'next/router';
 
-import { Button, Card, CardBody, CardFooter, CardHeader, Image, Link, Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@nextui-org/react";
+export default function Home() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
-export default function index() {
+  const handleOrderClick = () => {
+    if (session) {
+      router.push('/catalog/products');
+    } else {
+      router.push('/account/login');
+    }
+  };
+
   return (
     <div>
       <Navigation />
@@ -12,13 +24,13 @@ export default function index() {
           <div className="container mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center space-y-4 text-center">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-                Selamat Datang di Warung Kopi Beloo
+                {session ? `Selamat Datang Kembali, ${session.user?.name}!` : 'Selamat Datang di Warung Kopi Beloo'}
               </h1>
-              <p className="max-w-[700px]  md:text-xl">
-                Ngopi Ga Bikin Skibidi, Biar Makin Sigma fr fr no cap!
+              <p className="max-w-[700px] md:text-xl">
+                {session ? 'Siap untuk secangkir kopi lagi hari ini?' : 'Ngopi Ga Bikin Skibidi, Biar Makin Sigma fr fr no cap!'}
               </p>
-              <Button color="warning" size="lg">
-                Pesan Sekarang
+              <Button color="warning" size="lg" onPress={handleOrderClick}>
+                {session ? 'Pesan Sekarang' : 'Mulai Ngopi'}
               </Button>
             </div>
           </div>
@@ -27,7 +39,7 @@ export default function index() {
         <section className="w-full py-12 md:py-24 lg:py-32 ">
           <div className="container mx-auto px-4 md:px-6">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-8">
-              Minuman Favorit
+              {session ? 'Rekomendasi Untukmu' : 'Minuman Favorit'}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <Card>
@@ -36,7 +48,7 @@ export default function index() {
                 </CardHeader>
                 <CardBody className="overflow-visible py-2">
                   <Image
-                    alt="Kopi Susu Gula Aren"
+                    alt="Vanilla Latte"
                     className="object-cover rounded-xl"
                     src=""
                     width={300}
@@ -44,7 +56,7 @@ export default function index() {
                   />
                 </CardBody>
                 <CardFooter>
-                  <Button fullWidth color="warning">
+                  <Button fullWidth color="warning" onPress={handleOrderClick}>
                     Pesan Sekarang
                   </Button>
                 </CardFooter>
@@ -55,15 +67,15 @@ export default function index() {
                 </CardHeader>
                 <CardBody className="overflow-visible py-2">
                   <Image
-                    alt="Es Kopi Pokat"
+                    alt="Kopi Beloo"
                     className="object-cover rounded-xl"
-                    src=""
+                    src="/"
                     width={300}
                     height={300}
                   />
                 </CardBody>
                 <CardFooter>
-                  <Button fullWidth color="warning">
+                  <Button fullWidth color="warning" onPress={handleOrderClick}>
                     Pesan Sekarang
                   </Button>
                 </CardFooter>
@@ -74,15 +86,15 @@ export default function index() {
                 </CardHeader>
                 <CardBody className="overflow-visible py-2">
                   <Image
-                    alt="Kopi Luwak"
+                    alt="Kopi Maxwin"
                     className="object-cover rounded-xl"
-                    src=""
+                    src="/"
                     width={300}
                     height={300}
                   />
                 </CardBody>
                 <CardFooter>
-                  <Button fullWidth color="warning">
+                  <Button fullWidth color="warning" onPress={handleOrderClick}>
                     Pesan Sekarang
                   </Button>
                 </CardFooter>
@@ -95,18 +107,24 @@ export default function index() {
           <div className="container mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center space-y-4 text-center">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                Ngopi cik
+                {session ? 'Promo Khusus Untukmu' : 'Ngopi cik'}
               </h2>
               <p className="max-w-[600px] text-amber-100 md:text-xl">
-                Isi apa cok w bingung 
+                {session
+                  ? 'Dapatkan diskon spesial untuk pembelian berikutnya!'
+                  : 'Nikmati berbagai promo menarik untuk pelanggan baru.'}
               </p>
-              <Button color="warning" size="lg">
-                Ini ntar ke anu
+              <Button
+                color="warning"
+                size="lg"
+                onPress={() => router.push(session ? '/promo' : '/account/register')}
+              >
+                {session ? 'Lihat Promo' : 'Daftar Sekarang'}
               </Button>
             </div>
           </div>
         </section>
-        
+
       </main>
       <footer className="w-full py-6 px-4 md:px-6 border-t">
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">

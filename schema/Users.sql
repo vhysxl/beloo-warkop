@@ -1,0 +1,9 @@
+CREATE TABLE users (
+    userid SERIAL PRIMARY KEY,
+    nama VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    telepon VARCHAR(15) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    provider VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
