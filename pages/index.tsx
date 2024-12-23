@@ -1,18 +1,27 @@
-import React from 'react'
-import Navigation from '@/components/navbar'
-import { Button, Card, CardBody, CardFooter, CardHeader, Image, Link } from "@nextui-org/react";
+import React from "react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Image,
+  Link,
+} from "@nextui-org/react";
 import { useSession } from "next-auth/react";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
+
+import Navigation from "@/components/navbar";
 
 export default function Home() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
 
   const handleOrderClick = () => {
     if (session) {
-      router.push('/catalog/products');
+      router.push("/catalog/products");
     } else {
-      router.push('/account/login');
+      router.push("/account/login");
     }
   };
 
@@ -24,13 +33,17 @@ export default function Home() {
           <div className="container mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center space-y-4 text-center">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-                {session ? `Selamat Datang Kembali, ${session.user?.name}!` : 'Selamat Datang di Warung Kopi Beloo'}
+                {session
+                  ? `Selamat Datang Kembali, ${session.user?.name}!`
+                  : "Selamat Datang di Warung Kopi Beloo"}
               </h1>
               <p className="max-w-[700px] md:text-xl">
-                {session ? 'Siap untuk secangkir kopi lagi hari ini?' : 'Ngopi Ga Bikin Skibidi, Biar Makin Sigma fr fr no cap!'}
+                {session
+                  ? "Siap untuk secangkir kopi lagi hari ini?"
+                  : "Ngopi Ga Bikin Skibidi, Biar Makin Sigma fr fr no cap!"}
               </p>
               <Button color="warning" size="lg" onPress={handleOrderClick}>
-                {session ? 'Pesan Sekarang' : 'Mulai Ngopi'}
+                {session ? "Pesan Sekarang" : "Mulai Ngopi"}
               </Button>
             </div>
           </div>
@@ -39,7 +52,7 @@ export default function Home() {
         <section className="w-full py-12 md:py-24 lg:py-32 ">
           <div className="container mx-auto px-4 md:px-6">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-8">
-              {session ? 'Rekomendasi Untukmu' : 'Minuman Favorit'}
+              {session ? "Rekomendasi Untukmu" : "Minuman Favorit"}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <Card>
@@ -50,9 +63,9 @@ export default function Home() {
                   <Image
                     alt="Vanilla Latte"
                     className="object-cover rounded-xl"
+                    height={300}
                     src=""
                     width={300}
-                    height={300}
                   />
                 </CardBody>
                 <CardFooter>
@@ -69,9 +82,9 @@ export default function Home() {
                   <Image
                     alt="Kopi Beloo"
                     className="object-cover rounded-xl"
+                    height={300}
                     src="/"
                     width={300}
-                    height={300}
                   />
                 </CardBody>
                 <CardFooter>
@@ -88,9 +101,9 @@ export default function Home() {
                   <Image
                     alt="Kopi Maxwin"
                     className="object-cover rounded-xl"
+                    height={300}
                     src="/"
                     width={300}
-                    height={300}
                   />
                 </CardBody>
                 <CardFooter>
@@ -107,30 +120,29 @@ export default function Home() {
           <div className="container mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center space-y-4 text-center">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                {session ? 'Promo Khusus Untukmu' : 'Ngopi cik'}
+                {session ? "Promo Khusus Untukmu" : "Ngopi cik"}
               </h2>
               <p className="max-w-[600px] text-amber-100 md:text-xl">
                 {session
-                  ? 'Dapatkan diskon spesial untuk pembelian berikutnya!'
-                  : 'Nikmati berbagai promo menarik untuk pelanggan baru.'}
+                  ? "Dapatkan diskon spesial untuk pembelian berikutnya!"
+                  : "Nikmati berbagai promo menarik untuk pelanggan baru."}
               </p>
               <Button
                 color="warning"
                 size="lg"
-                onPress={() => router.push(session ? '/promo' : '/account/register')}
+                onPress={() =>
+                  router.push(session ? "/promo" : "/account/register")
+                }
               >
-                {session ? 'Lihat Promo' : 'Daftar Sekarang'}
+                {session ? "Lihat Promo" : "Daftar Sekarang"}
               </Button>
             </div>
           </div>
         </section>
-
       </main>
       <footer className="w-full py-6 px-4 md:px-6 border-t">
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-sm text-gray-500">
-            © 2024 Warkop Beloo
-          </p>
+          <p className="text-sm text-gray-500">© 2024 Warkop Beloo</p>
           <div className="flex gap-4 sm:gap-6 mt-4 sm:mt-0">
             <Link href="#" size="sm">
               Kontak
@@ -142,5 +154,5 @@ export default function Home() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
