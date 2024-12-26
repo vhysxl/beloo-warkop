@@ -7,6 +7,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 import { fontSans, fontMono } from "@/config/fonts";
 import "@/styles/globals.css";
+import { CartProvider } from "@/contexts/cartContext";
 
 export default function App({
   Component,
@@ -18,7 +19,9 @@ export default function App({
     <SessionProvider session={session}>
       <NextUIProvider navigate={router.push}>
         <NextThemesProvider attribute="class" defaultTheme="light">
-          <Component {...pageProps} />
+          <CartProvider>
+            <Component {...pageProps} />
+          </CartProvider>
         </NextThemesProvider>
       </NextUIProvider>
     </SessionProvider>

@@ -2,6 +2,7 @@
 
 import React from "react";
 import {
+  Badge,
   Navbar,
   NavbarBrand,
   NavbarContent,
@@ -17,13 +18,17 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 import { useSession, signOut } from "next-auth/react";
-import { CircleUser, LogOut, Settings, User } from "lucide-react";
+import { CircleUser, LogOut, Settings, User, ShoppingCart } from "lucide-react";
 
 import ThemeSwitcher from "./switcher";
+
+import { useCart } from "@/contexts/cartContext";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { data: session } = useSession();
+  const { state } = useCart();
+  const cartItemCount = state.items.length;
 
   const menuItems = [
     { name: "Home", href: "/" },
@@ -121,6 +126,25 @@ export default function Navigation() {
             >
               Account
             </Button>
+          )}
+        </NavbarItem>
+        <NavbarItem>
+          {session && (
+            <Badge
+              className="mt-1 mr-1 p-2"
+              color="danger"
+              content={cartItemCount}
+              isInvisible={cartItemCount === 0}
+              size="sm"
+            >
+              <Button
+                isIconOnly
+                as={Link}
+                className="rounded-full bg-white dark:bg-black hover:bg-[#C5A572] dark:hover:bg-[#C5A572] transition-colors duration-500"
+                href="/checkout/cart"
+                startContent={<ShoppingCart />}
+              />
+            </Badge>
           )}
         </NavbarItem>
         <NavbarItem>

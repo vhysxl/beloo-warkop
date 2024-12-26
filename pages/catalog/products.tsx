@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import Navigation from "@/components/navbar";
 import { ProductCategory } from "@/types/category";
 import { Product } from "@/types/product";
+import { useCart } from "@/contexts/cartContext";
 
 const groupProductsByCategory = (products: Product[]) => {
   return products.reduce(
@@ -43,14 +44,12 @@ export default function ProductsPage() {
   const [groupedProducts, setGroupedProducts] = useState<
     Record<string, Product[]>
   >({});
+  const { dispatch } = useCart();
+  const { state } = useCart();
 
-  const handleOrderClick = (productId: number) => {
-    if (session) {
-      router.push(`/order/${productId}`);
-    } else {
-      router.push("/account/login");
-    }
-  };
+  useEffect(() => {
+    console.log("Isi cart:", state.items);
+  }, [state.items]);
 
   const fetchProducts = async () => {
     try {
@@ -69,6 +68,12 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
+  const addToCart = (product: Product) => {
+    dispatch({
+      type: "ADD_ITEM",
+      payload: product,
+    });
+  };
   const renderProducts = (category: ProductCategory) => {
     const products = groupedProducts[category] || []; // Gunakan array kosong jika undefined
 
@@ -76,36 +81,42 @@ export default function ProductsPage() {
       return <p>Produk tidak ditemukan untuk kategori ini.</p>;
     }
 
-    return products.map((product) => (
-      <Card key={product.product_id}>
-        <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-          <h4 className="font-bold text-large">{product.name}</h4>
-          <p className="text-tiny uppercase font-bold">
-            Rp {product.price.toLocaleString()}
-          </p>
-        </CardHeader>
-        <CardBody className="overflow-visible py-2">
-          <Image
-            alt={product.name}
-            className="object-cover rounded-xl"
-            height={300}
-            src={product.image_url}
-            width={300}
-          />
-        </CardBody>
-        <CardFooter className="flex-col items-start">
-          <p className="text-default-500">{product.description}</p>
-          <Button
-            fullWidth
-            className="mt-4"
-            color="warning"
-            onPress={() => handleOrderClick(product.product_id)}
-          >
-            Pesan Sekarang
-          </Button>
-        </CardFooter>
-      </Card>
-    ));
+    return products.map((product) => {
+      return (
+        <Card key={product.product_id}>
+          <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+            <h4 className="font-bold text-large">{product.name}</h4>
+            <p className="text-tiny uppercase font-bold">
+              Rp {product.price.toLocaleString()}
+            </p>
+          </CardHeader>
+          <CardBody className="overflow-visible py-2">
+            <Image
+              alt={product.name}
+              className="object-cover rounded-xl"
+              height={300}
+              src={product.image_url}
+              width={300}
+            />
+          </CardBody>
+          <CardFooter className="flex-col items-start">
+            <p className="text-default-500">{product.description}</p>
+            <Button
+              fullWidth
+              className="mt-4"
+              color="warning"
+              onPress={
+                session
+                  ? () => addToCart(product)
+                  : () => router.push("/account/login")
+              }
+            >
+              Pesan Sekarang
+            </Button>
+          </CardFooter>
+        </Card>
+      );
+    });
   };
 
   return (
