@@ -11,6 +11,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
+  Spinner,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -27,6 +28,7 @@ export default function CartPage() {
   const { state, dispatch } = useCart();
   const { handleGetCart, handleQuantityChange, handleCartDeletion } =
     useCartApi();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (session) {
@@ -39,14 +41,17 @@ export default function CartPage() {
             payload: data,
           });
         } catch (error) {
-          //error here
+          // Error handling remains unchanged
         } finally {
+          setIsLoading(false);
         }
       };
 
       fetchCart();
+    } else {
+      setIsLoading(false);
     }
-  }, []);
+  }, [session, dispatch]);
 
   if (!session) {
     return (
@@ -116,7 +121,11 @@ export default function CartPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-extrabold mb-8">Keranjang Belanja</h1>
 
-          {state.items.length === 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center items-center h-64">
+              <Spinner color="warning" size="lg" />
+            </div>
+          ) : state.items.length === 0 ? (
             <div className="rounded-2xl shadow-sm p-8 text-center">
               <div className="w-24 h-24 mx-auto mb-6">
                 <svg
@@ -143,7 +152,7 @@ export default function CartPage() {
                 className="font-semibold"
                 color="warning"
                 size="lg"
-                onPress={() => router.push("/products")}
+                onPress={() => router.push("/catalog/products")}
               >
                 Lihat Menu
               </Button>

@@ -98,5 +98,10 @@ export default async function CART(req: NextApiRequest, res: NextApiResponse) {
           .status(500)
           .json({ message: "terjadi kesalahan di server", error });
       }
+
+    default:
+      res.setHeader("Allow", ["GET", "POST"]);
+
+      return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }

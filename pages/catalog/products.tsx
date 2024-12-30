@@ -9,6 +9,7 @@ import {
   CardHeader,
   Image,
   Link,
+  Spinner,
   Tabs,
   Tab,
 } from "@nextui-org/react";
@@ -47,6 +48,7 @@ export default function ProductsPage() {
   >({});
   const { dispatch } = useCart();
   const { handleAddToCart } = useCartApi();
+  const [loading, setLoading] = useState(true);
 
   const fetchProducts = async () => {
     try {
@@ -58,6 +60,8 @@ export default function ProductsPage() {
       setGroupedProducts(grouped);
     } catch (error) {
       return error;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,10 +78,9 @@ export default function ProductsPage() {
           type: "ADD_ITEM",
           payload: product,
         });
-      } catch (error) {
-        //add erro here
-      }
+      } catch (error) {}
     } else {
+      alert("stock Habis");
     }
   };
 
@@ -108,18 +111,24 @@ export default function ProductsPage() {
           </CardBody>
           <CardFooter className="flex-col items-start">
             <p className="text-default-500">{product.description}</p>
-            <Button
-              fullWidth
-              className="mt-4"
-              color="warning"
-              onPress={
-                session
-                  ? () => addToCart(product)
-                  : () => router.push("/account/login")
-              }
-            >
-              Pesan Sekarang
-            </Button>
+            {product.stock ? (
+              <Button
+                fullWidth
+                className="mt-4"
+                color="warning"
+                onPress={
+                  session
+                    ? () => addToCart(product)
+                    : () => router.push("/account/login")
+                }
+              >
+                Pesan Sekarang
+              </Button>
+            ) : (
+              <Button fullWidth isDisabled className="mt-4" color="default">
+                Produk Habis
+              </Button>
+            )}
           </CardFooter>
         </Card>
       );
@@ -137,8 +146,7 @@ export default function ProductsPage() {
                 Menu Warkop Beloo
               </h1>
               <p className="max-w-[700px] md:text-xl">
-                Nikmati berbagai pilihan makanan, minuman, dan dessert lezat
-                kami!
+                PESAN SEKARANG DATANG TINGGAL ENJOY! 😋
               </p>
             </div>
           </div>
@@ -158,9 +166,15 @@ export default function ProductsPage() {
               <Tab key="minuman" title="Minuman" />
               <Tab key="makanan" title="Makanan" />
             </Tabs>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {renderProducts(selectedCategory)}
-            </div>
+            {loading ? (
+              <div className="flex justify-center items-center h-64">
+                <Spinner color="warning" size="lg" />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {renderProducts(selectedCategory)}
+              </div>
+            )}
           </div>
         </section>
 
@@ -168,19 +182,8 @@ export default function ProductsPage() {
           <div className="container mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center space-y-4 text-center">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                Promo Spesial
+                Crafted with Care, Served with Love 🤗❤️.
               </h2>
-              <p className="max-w-[600px] text-amber-100 md:text-xl">
-                Dapatkan diskon 15% untuk pembelian 1 makanan, 1 minuman, dan 1
-                dessert!
-              </p>
-              <Button
-                color="warning"
-                size="lg"
-                onPress={() => router.push("/promo")}
-              >
-                Lihat Semua Promo
-              </Button>
             </div>
           </div>
         </section>

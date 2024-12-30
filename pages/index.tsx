@@ -116,13 +116,13 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-[#C5A572] text-white">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-[#C5A572]">
           <div className="container mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center space-y-4 text-center">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
                 {session ? "Promo Khusus Untukmu" : "Ngopi cik"}
               </h2>
-              <p className="max-w-[600px] text-amber-100 md:text-xl">
+              <p className="max-w-[600px] text-white md:text-xl">
                 {session
                   ? "Dapatkan diskon spesial untuk pembelian berikutnya!"
                   : "Nikmati berbagai promo menarik untuk pelanggan baru."}

@@ -59,6 +59,7 @@ export default async function HANDLER(
 
         return res.status(200).json({ message: "success" });
       } catch (error) {}
+      break;
 
     case "DELETE":
       if (session) {
@@ -87,5 +88,11 @@ export default async function HANDLER(
           }
         }
       }
+      break;
+
+    default:
+      res.setHeader("Allow", ["PUT", "DELETE"]);
+
+      return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
