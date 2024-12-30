@@ -58,9 +58,10 @@ export const authOptions: NextAuthOptions = {
 
         // Return user data
         return {
-          id: existingUser.rows[0].id,
+          id: existingUser.rows[0].userid,
           email: existingUser.rows[0].email,
           name: existingUser.rows[0].nama,
+          telepon: existingUser.rows[0].telepon,
         };
       },
     }),
@@ -92,6 +93,8 @@ export const authOptions: NextAuthOptions = {
             // console.log("Data insertion completed");
           }
 
+          user.id = existingUser.rows[0]?.userid || null;
+
           return true;
         } catch (error: any) {
           //   console.error("Error in Google sign in:", error.message);
@@ -103,10 +106,17 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (session?.user) {
-        session.user.id = token.sub!;
+        session.user.id = token.id as string;
       }
 
       return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+
+      return token;
     },
   },
   session: {

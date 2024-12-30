@@ -17,7 +17,8 @@ type CartAction =
   | {
       type: "UPDATE_QUANTITY";
       payload: { product_id: number; quantity: number };
-    };
+    }
+  | { type: "SET_CART"; payload: CartItem[] };
 
 const CartContext = createContext<
   | {
@@ -29,6 +30,12 @@ const CartContext = createContext<
 
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
+    case "SET_CART":
+      return {
+        ...state,
+        items: action.payload,
+      };
+
     case "ADD_ITEM":
       const existingItem = state.items.find(
         (item) => item.product_id === action.payload.product_id,

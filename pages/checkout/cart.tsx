@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Image,
@@ -19,11 +19,34 @@ import { ShoppingCart, LogIn } from "lucide-react";
 import Navigation from "@/components/navbar";
 import { useCart } from "@/contexts/cartContext";
 import { Product } from "@/types/product";
+import { useCartApi } from "@/hooks/useCartApi";
 
 export default function CartPage() {
   const router = useRouter();
   const { data: session } = useSession();
   const { state, dispatch } = useCart();
+  const { handleGetCart, handleQuantityChange, handleCartDeletion } =
+    useCartApi();
+
+  useEffect(() => {
+    if (session) {
+      const fetchCart = async () => {
+        try {
+          const data = await handleGetCart();
+
+          dispatch({
+            type: "SET_CART",
+            payload: data,
+          });
+        } catch (error) {
+          //error here
+        } finally {
+        }
+      };
+
+      fetchCart();
+    }
+  }, []);
 
   if (!session) {
     return (
@@ -56,17 +79,22 @@ export default function CartPage() {
     );
   }
 
-  const removeFromCart = (product: Product) => {
+  const removeFromCart = async (product: Product) => {
+    await handleCartDeletion(product.product_id);
+
     dispatch({
       type: "REMOVE_ITEM",
       payload: product.product_id,
     });
   };
 
-  const updateQuantity = (product: Product, newQuantity: number) => {
+  const updateQuantity = async (product: Product, newQuantity: number) => {
     if (newQuantity === 0) {
+      handleQuantityChange(product.product_id, 0);
       removeFromCart(product);
     } else {
+      await handleQuantityChange(product.product_id, newQuantity);
+
       dispatch({
         type: "UPDATE_QUANTITY",
         payload: { ...product, quantity: newQuantity },
@@ -177,9 +205,13 @@ export default function CartPage() {
                               className="rounded-none"
                               isDisabled={item.stock === 0}
                               variant="light"
-                              onPress={() =>
-                                updateQuantity(item, item.quantity - 1)
-                              }
+                              onPress={() => {
+                                if (item.quantity === 0) {
+                                  updateQuantity(item, 0);
+                                } else if (item.quantity > 0) {
+                                  updateQuantity(item, item.quantity - 1);
+                                }
+                              }}
                             >
                               -
                             </Button>

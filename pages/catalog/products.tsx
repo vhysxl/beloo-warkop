@@ -19,6 +19,7 @@ import Navigation from "@/components/navbar";
 import { ProductCategory } from "@/types/category";
 import { Product } from "@/types/product";
 import { useCart } from "@/contexts/cartContext";
+import { useCartApi } from "@/hooks/useCartApi";
 
 const groupProductsByCategory = (products: Product[]) => {
   return products.reduce(
@@ -45,11 +46,7 @@ export default function ProductsPage() {
     Record<string, Product[]>
   >({});
   const { dispatch } = useCart();
-  const { state } = useCart();
-
-  useEffect(() => {
-    console.log("Isi cart:", state.items);
-  }, [state.items]);
+  const { handleAddToCart } = useCartApi();
 
   const fetchProducts = async () => {
     try {
@@ -68,14 +65,24 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
-  const addToCart = (product: Product) => {
-    dispatch({
-      type: "ADD_ITEM",
-      payload: product,
-    });
+  const addToCart = async (product: Product) => {
+    if (product.stock > 0) {
+      try {
+        await handleAddToCart(product.product_id, 1);
+
+        dispatch({
+          type: "ADD_ITEM",
+          payload: product,
+        });
+      } catch (error) {
+        //add erro here
+      }
+    } else {
+    }
   };
+
   const renderProducts = (category: ProductCategory) => {
-    const products = groupedProducts[category] || []; // Gunakan array kosong jika undefined
+    const products = groupedProducts[category] || [];
 
     if (products.length === 0) {
       return <p>Produk tidak ditemukan untuk kategori ini.</p>;

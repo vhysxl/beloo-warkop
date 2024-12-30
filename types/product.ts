@@ -6,7 +6,6 @@ export interface Product {
   price: number;
   category: string;
   image_url: string;
-  is_available: boolean;
   stock: number;
   createdAt: Date;
   updatedAt: Date;

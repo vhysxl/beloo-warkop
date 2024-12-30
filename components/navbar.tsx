@@ -28,7 +28,10 @@ export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { data: session } = useSession();
   const { state } = useCart();
-  const cartItemCount = state.items.length;
+  const cartItemCount = state.items.reduce(
+    (total, item) => total + item.quantity,
+    0,
+  );
 
   const menuItems = [
     { name: "Home", href: "/" },

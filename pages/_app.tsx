@@ -2,12 +2,13 @@ import type { AppProps } from "next/app";
 
 import { useRouter } from "next/router";
 import { SessionProvider } from "next-auth/react";
-import { NextUIProvider } from "@nextui-org/system";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { NextUIProvider } from "@nextui-org/system";
 
 import { fontSans, fontMono } from "@/config/fonts";
 import "@/styles/globals.css";
 import { CartProvider } from "@/contexts/cartContext";
+import CartInitializer from "@/components/cartInitializer";
 
 export default function App({
   Component,
@@ -20,6 +21,7 @@ export default function App({
       <NextUIProvider navigate={router.push}>
         <NextThemesProvider attribute="class" defaultTheme="light">
           <CartProvider>
+            <CartInitializer />
             <Component {...pageProps} />
           </CartProvider>
         </NextThemesProvider>

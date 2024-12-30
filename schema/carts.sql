@@ -1,0 +1,6 @@
+CREATE TABLE carts (
+    cart_id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(user_id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
