@@ -7,11 +7,11 @@ import { authOptions } from "./auth/[...nextauth]";
 export default async function CART(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions);
 
-  if (!session?.user?.id) {
+  if (!session) {
     return res.status(401).json({ message: "Unauthorized, please log in" });
   }
 
-  const user_id = session.user.id;
+  const user_id = session.user?.id;
 
   try {
     let cartQuery =
