@@ -10,36 +10,35 @@ export default async function HANDLER(
 ) {
   const session = await getServerSession(req, res, authOptions);
 
+  if (!session) {
+    return res.status(401).json({ message: "Unauthorized, please log in" });
+  }
+
+  const user_id = session?.user?.id;
+  const { product_id } = req.query;
+
+  if (Array.isArray(product_id) || !product_id) {
+    return res.status(400).json({ message: "Invalid product_id" });
+  }
+
+  const queryCartId = await sql`
+          SELECT cart_id FROM carts WHERE user_id=${user_id};
+        `;
+
+  const cart_id = queryCartId.rows[0].cart_id;
+
   switch (req.method) {
     case "PUT":
       try {
-        if (!session) {
-          return res
-            .status(401)
-            .json({ message: "Unauthorized, please log in" });
-        }
-
-        const { product_id } = req.query;
         const { quantity: newQuantity } = req.body;
-        const user_id = session.user?.id;
-
-        if (Array.isArray(product_id) || !product_id) {
-          return res.status(400).json({ message: "Invalid product_id" });
-        }
-
-        const queryCartId = await sql`
-        SELECT cart_id FROM carts WHERE user_id=${user_id};
-      `;
-
-        const cart_id = queryCartId.rows[0].cart_id;
 
         if (!cart_id) {
           return res.status(400).json({ message: "cart tidak ditemukan" });
         }
 
         const stockChecking = await sql`
-        SELECT stock FROM products WHERE product_id=${product_id}
-      `;
+          SELECT stock FROM products WHERE product_id=${product_id}
+        `;
 
         const stock = stockChecking.rows[0].stock;
 
@@ -63,19 +62,6 @@ export default async function HANDLER(
 
     case "DELETE":
       if (session) {
-        const { product_id } = req.query;
-        const user_id = session.user?.id;
-
-        if (Array.isArray(product_id) || !product_id) {
-          return res.status(400).json({ message: "Invalid product_id" });
-        }
-
-        const queryCartId = await sql`
-          SELECT cart_id FROM carts WHERE user_id=${user_id};
-        `;
-
-        const cart_id = queryCartId.rows[0].cart_id;
-
         if (cart_id) {
           try {
             await sql`

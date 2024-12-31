@@ -2,7 +2,6 @@ import React, { createContext, useContext, useReducer } from "react";
 
 import { Product } from "@/types/product";
 
-// Tambahkan interface CartItem yang extends Product dengan quantity
 interface CartItem extends Product {
   quantity: number;
 }

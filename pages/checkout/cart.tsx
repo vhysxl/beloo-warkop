@@ -21,6 +21,7 @@ import Navigation from "@/components/navbar";
 import { useCart } from "@/contexts/cartContext";
 import { Product } from "@/types/product";
 import { useCartApi } from "@/hooks/useCartApi";
+import Footer from "@/components/footer";
 
 export default function CartPage() {
   const router = useRouter();
@@ -117,7 +118,7 @@ export default function CartPage() {
   return (
     <div className="min-h-screen ">
       <Navigation />
-      <main className="py-16">
+      <main className="py-16 min-h-screen ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-extrabold mb-8">Keranjang Belanja</h1>
 
@@ -326,21 +327,7 @@ export default function CartPage() {
         </div>
       </main>
 
-      <footer className="mt-16border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-500">© 2024 Warkop Beloo</p>
-            <div className="flex gap-6 mt-4 md:mt-0">
-              <Link className="text-gray-500 hover:text-gray-900" href="#">
-                Kontak
-              </Link>
-              <Link className="text-gray-500 hover:text-gray-900" href="#">
-                Alamat
-              </Link>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

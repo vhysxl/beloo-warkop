@@ -8,7 +8,6 @@ import {
   CardFooter,
   CardHeader,
   Image,
-  Link,
   Spinner,
   Tabs,
   Tab,
@@ -21,6 +20,7 @@ import { ProductCategory } from "@/types/category";
 import { Product } from "@/types/product";
 import { useCart } from "@/contexts/cartContext";
 import { useCartApi } from "@/hooks/useCartApi";
+import Footer from "@/components/footer";
 
 const groupProductsByCategory = (products: Product[]) => {
   return products.reduce(
@@ -188,19 +188,7 @@ export default function ProductsPage() {
           </div>
         </section>
       </main>
-      <footer className="w-full py-6 px-4 md:px-6 border-t">
-        <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-sm text-gray-500">© 2024 Warkop Beloo</p>
-          <div className="flex gap-4 sm:gap-6 mt-4 sm:mt-0">
-            <Link href="#" size="sm">
-              Kontak
-            </Link>
-            <Link href="#" size="sm">
-              Alamat
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
