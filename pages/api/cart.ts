@@ -30,7 +30,7 @@ export default async function CART(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
       case "GET":
         if (!cart_id) {
-          return res.status(400).json({ message: "Cart kosong" });
+          return null;
         }
 
         const result = await sql`
