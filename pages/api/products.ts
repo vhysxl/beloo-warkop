@@ -13,6 +13,6 @@ export default async function GET(req: NextApiRequest, res: NextApiResponse) {
       return res.status(500).json({ message: "Terjadi kesalahan di Server" });
     }
   } else {
-    return res.status(405).end(`method ${req.method} not allowed`);
+    return res.status(405).end(`method ${req.method} tidak diizinkan`);
   }
 }

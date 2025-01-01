@@ -7,11 +7,7 @@ import { authOptions } from "./auth/[...nextauth]";
 export default async function CART(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions);
 
-  if (!session) {
-    return res.status(401).json({ message: "Unauthorized, please log in" });
-  }
-
-  const user_id = session.user?.id;
+  const user_id = session?.user?.id;
 
   try {
     let cartQuery =
@@ -30,7 +26,7 @@ export default async function CART(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
       case "GET":
         if (!cart_id) {
-          return null;
+          return res.status(200).json({ message: "Cart anda kosong" });
         }
 
         const result = await sql`
@@ -43,6 +39,12 @@ export default async function CART(req: NextApiRequest, res: NextApiResponse) {
         return res.status(200).json(result.rows);
 
       case "POST":
+        if (!session) {
+          return res.status(400).json({
+            message: "Akses tidak diizinkan. Harap login terlebih dahulu.",
+          });
+        }
+
         const { product_id, quantity } = req.body;
 
         if (!product_id || !quantity || quantity < 1) {
@@ -54,13 +56,13 @@ export default async function CART(req: NextApiRequest, res: NextApiResponse) {
         `;
 
         if (stockItem.rowCount === 0) {
-          return res.status(404).json({ message: "Product not found" });
+          return res.status(404).json({ message: "Product tidak ditemukan" });
         }
 
         const stock = stockItem.rows[0].stock;
 
         if (stock < quantity) {
-          return res.status(400).json({ message: "Insufficient stock" });
+          return res.status(400).json({ message: "Stok tidak mencukupi" });
         }
 
         const existingItem = await sql`
@@ -83,13 +85,13 @@ export default async function CART(req: NextApiRequest, res: NextApiResponse) {
               WHERE cart_id=${cart_id} AND product_id=${product_id};
             `;
           } else {
-            return res
-              .status(400)
-              .json({ message: "Insufficient stock to update quantity" });
+            return res.status(400).json({ message: "Stok tidak cukup" });
           }
         }
 
-        return res.status(201).json({ message: "Item added to cart" });
+        return res
+          .status(201)
+          .json({ message: "Item berhasil ditambahkan ke cart" });
 
       default:
         res.setHeader("Allow", ["GET", "POST"]);

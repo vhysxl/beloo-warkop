@@ -11,19 +11,21 @@ export default async function HANDLER(
   const session = await getServerSession(req, res, authOptions);
 
   if (!session) {
-    return res.status(401).json({ message: "Unauthorized, please log in" });
+    return res
+      .status(401)
+      .json({ message: "Akses tidak diizinkan. Harap login terlebih dahulu." });
   }
 
   const user_id = session?.user?.id;
   const { product_id } = req.query;
 
   if (Array.isArray(product_id) || !product_id) {
-    return res.status(400).json({ message: "Invalid product_id" });
+    return res.status(400).json({ message: "Product_id tidak valid" });
   }
 
   const queryCartId = await sql`
           SELECT cart_id FROM carts WHERE user_id=${user_id};
-        `;
+  `;
 
   const cart_id = queryCartId.rows[0].cart_id;
 

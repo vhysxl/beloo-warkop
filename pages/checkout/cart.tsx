@@ -96,7 +96,7 @@ export default function CartPage() {
 
   const updateQuantity = async (product: Product, newQuantity: number) => {
     if (newQuantity === 0) {
-      handleQuantityChange(product.product_id, 0);
+      await handleQuantityChange(product.product_id, 0);
       removeFromCart(product);
     } else {
       await handleQuantityChange(product.product_id, newQuantity);
