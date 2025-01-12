@@ -22,6 +22,7 @@ import { useCart } from "@/contexts/cartContext";
 import { Product } from "@/types/product";
 import { useCartApi } from "@/hooks/useCartApi";
 import Footer from "@/components/footer";
+import { useNote } from "@/contexts/noteContext";
 
 export default function CartPage() {
   const router = useRouter();
@@ -30,6 +31,7 @@ export default function CartPage() {
   const { handleGetCart, handleQuantityChange, handleCartDeletion } =
     useCartApi();
   const [isLoading, setIsLoading] = useState(true);
+  const { note, setNote } = useNote();
 
   useEffect(() => {
     if (session) {
@@ -178,104 +180,105 @@ export default function CartPage() {
                     <TableColumn>AKSI</TableColumn>
                   </TableHeader>
                   <TableBody>
-                    {state.items.map((item) => (
-                      <TableRow
-                        key={item.product_id}
-                        className={
-                          item.stock === 0 ? "opacity-50" : "opacity-100"
-                        }
-                      >
-                        <TableCell>
-                          <div className="flex items-center gap-4">
-                            <div className="w-16 h-16 rounded-lg overflow-hidden">
-                              <Image
-                                alt={item.name}
-                                className="w-12 h-12 object-cover"
-                                src={item.image_url}
-                              />
+                    {state.items &&
+                      state.items.map((item) => (
+                        <TableRow
+                          key={item.product_id}
+                          className={
+                            item.stock === 0 ? "opacity-50" : "opacity-100"
+                          }
+                        >
+                          <TableCell>
+                            <div className="flex items-center gap-4">
+                              <div className="w-16 h-16 rounded-lg overflow-hidden">
+                                <Image
+                                  alt={item.name}
+                                  className="w-12 h-12 object-cover"
+                                  src={item.image_url}
+                                />
+                              </div>
                             </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-4">
-                            <div>
-                              <h3 className="font-medium">{item.name}</h3>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-4">
+                              <div>
+                                <h3 className="font-medium">{item.name}</h3>
+                              </div>
                             </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <span className="font-medium">
-                            Rp {item.price.toLocaleString()}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="inline-flex items-center rounded-lg border">
-                            <Button
-                              isIconOnly
-                              className="rounded-none"
-                              isDisabled={item.stock === 0}
-                              variant="light"
-                              onPress={() => {
-                                if (item.quantity === 0) {
-                                  updateQuantity(item, 0);
-                                } else if (item.quantity > 0) {
-                                  updateQuantity(item, item.quantity - 1);
-                                }
-                              }}
-                            >
-                              -
-                            </Button>
-                            <span className="w-12 text-center font-medium">
-                              {item.stock > 0
-                                ? item.quantity
-                                : (item.quantity = 0)}
+                          </TableCell>
+                          <TableCell>
+                            <span className="font-medium">
+                              Rp {item.price.toLocaleString()}
                             </span>
+                          </TableCell>
+                          <TableCell>
+                            <div className="inline-flex items-center rounded-lg border">
+                              <Button
+                                isIconOnly
+                                className="rounded-none"
+                                isDisabled={item.stock === 0}
+                                variant="light"
+                                onPress={() => {
+                                  if (item.quantity === 0) {
+                                    updateQuantity(item, 0);
+                                  } else if (item.quantity > 0) {
+                                    updateQuantity(item, item.quantity - 1);
+                                  }
+                                }}
+                              >
+                                -
+                              </Button>
+                              <span className="w-12 text-center font-medium">
+                                {item.stock > 0
+                                  ? item.quantity
+                                  : (item.quantity = 0)}
+                              </span>
+                              <Button
+                                isIconOnly
+                                className="rounded-none"
+                                isDisabled={item.stock === 0}
+                                variant="light"
+                                onPress={() =>
+                                  updateQuantity(item, item.quantity + 1)
+                                }
+                              >
+                                +
+                              </Button>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <span className="font-medium">
+                              {item.stock > 0 ? (
+                                `Rp ${(item.price * item.quantity).toLocaleString()}`
+                              ) : (
+                                <span className="text-danger">Stok Habis</span>
+                              )}
+                            </span>
+                          </TableCell>
+                          <TableCell>
                             <Button
                               isIconOnly
-                              className="rounded-none"
-                              isDisabled={item.stock === 0}
+                              color="danger"
                               variant="light"
-                              onPress={() =>
-                                updateQuantity(item, item.quantity + 1)
-                              }
+                              onPress={() => removeFromCart(item)}
                             >
-                              +
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                />
+                              </svg>
                             </Button>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <span className="font-medium">
-                            {item.stock > 0 ? (
-                              `Rp ${(item.price * item.quantity).toLocaleString()}`
-                            ) : (
-                              <span className="text-danger">Stok Habis</span>
-                            )}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            isIconOnly
-                            color="danger"
-                            variant="light"
-                            onPress={() => removeFromCart(item)}
-                          >
-                            <svg
-                              className="w-5 h-5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                              />
-                            </svg>
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                          </TableCell>
+                        </TableRow>
+                      ))}
                   </TableBody>
                 </Table>
               </div>
@@ -287,7 +290,9 @@ export default function CartPage() {
                   </h3>
                   <textarea
                     className="w-full h-32 p-3 border-black rounded-lg resize-none"
-                    placeholder="Tambahkan catatan untuk pesanan Anda..."
+                    placeholder="Tambahkan catatan untuk pesanan Anda... (eg: Gulanya banyakin)"
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
                   />
                 </div>
 
@@ -316,7 +321,7 @@ export default function CartPage() {
                     className="font-semibold"
                     color="warning"
                     size="lg"
-                    onPress={() => router.push("/checkout")}
+                    onPress={() => router.push("/checkout/checkoutPage")}
                   >
                     Lanjutkan ke Pembayaran
                   </Button>

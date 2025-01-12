@@ -2,7 +2,7 @@ import React from "react";
 
 interface statusMessageProps {
   children: React.ReactNode;
-  type?: "success" | "error" | "warning" | "info";
+  type?: "success" | "error" | "warning" | "info" | "errorOrder";
   className?: string;
 }
 
@@ -18,6 +18,7 @@ export default function StatusMessage({
     error: "bg-red-100 text-red-700 border border-red-400",
     warning: "bg-yellow-100 text-yellow-700 border border-yellow-400",
     info: "bg-blue-100 text-blue-700 border border-blue-400",
+    errorOrder: "bg-red-100 text-red-700 border border-red-400",
   };
 
   return (

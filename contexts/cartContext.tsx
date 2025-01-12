@@ -32,7 +32,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     case "SET_CART":
       return {
         ...state,
-        items: action.payload,
+        items: Array.isArray(action.payload) ? action.payload : [],
       };
 
     case "ADD_ITEM":

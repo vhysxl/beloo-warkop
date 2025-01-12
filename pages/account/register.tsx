@@ -43,11 +43,23 @@ export default function Register() {
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+    const cleanPhone = telepon.replace(/^0+/, "");
 
     if (!emailRegex.test(email)) {
       setStatusMessage({
         type: "error",
         message: "Email yang dimasukan tidak valid 🤦‍♂️",
+      });
+      setIsLoading(false);
+
+      return;
+    }
+
+    if (!phoneRegex.test(`+62${cleanPhone}`)) {
+      setStatusMessage({
+        type: "error",
+        message: "Telepon yang dimasukan tidak valid 🤦‍♂️",
       });
       setIsLoading(false);
 
@@ -83,7 +95,7 @@ export default function Register() {
       if (!response.ok) {
         setStatusMessage({
           type: "error",
-          message: data.message || "Terjadi kelasahan di server😥",
+          message: data.message || "Terjadi kesalahan di server😥",
         });
         setIsLoading(false);
 

@@ -9,6 +9,7 @@ import { fontSans, fontMono } from "@/config/fonts";
 import "@/styles/globals.css";
 import { CartProvider } from "@/contexts/cartContext";
 import CartInitializer from "@/components/cartInitializer";
+import { NoteProvider } from "@/contexts/noteContext";
 
 export default function App({
   Component,
@@ -21,8 +22,10 @@ export default function App({
       <NextUIProvider navigate={router.push}>
         <NextThemesProvider attribute="class" defaultTheme="light">
           <CartProvider>
-            <CartInitializer />
-            <Component {...pageProps} />
+            <NoteProvider>
+              <CartInitializer />
+              <Component {...pageProps} />
+            </NoteProvider>
           </CartProvider>
         </NextThemesProvider>
       </NextUIProvider>

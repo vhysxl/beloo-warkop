@@ -89,15 +89,14 @@ export const authOptions: NextAuthOptions = {
             // Register new Google user
             await sql`
                     INSERT INTO Users (nama, email, provider, telepon, password)
-                    VALUES (${user.name}, ${user.email}, 'google', '', '')`;
-            // console.log("Data insertion completed");
+                    VALUES (${user.name}, ${user.email}, 'google', '', '') RETURNING *`;
           }
 
           user.id = existingUser.rows[0]?.userid || null;
+          user.telepon = existingUser.rows[0]?.telepon || null;
 
           return true;
         } catch (error: any) {
-          //   console.error("Error in Google sign in:", error.message);
           throw new Error(error.message);
         }
       }
@@ -107,6 +106,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session?.user) {
         session.user.id = token.id as string;
+        session.user.telepon = token.telepon as number;
       }
 
       return session;
@@ -114,6 +114,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.telepon = user.telepon;
       }
 
       return token;

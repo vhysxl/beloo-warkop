@@ -1,9 +1,9 @@
 //user
 export interface User {
-  user_id: number;
+  userid: number;
   email: string;
-  phone: number;
+  nama: string;
+  telepon: string;
   password: string;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date | undefined;
 }

@@ -26,7 +26,7 @@ export default async function CART(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
       case "GET":
         if (!cart_id) {
-          return res.status(200).json({ message: "Cart anda kosong" });
+          return res.status(200).json([]);
         }
 
         const result = await sql`

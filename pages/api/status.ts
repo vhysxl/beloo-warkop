@@ -5,14 +5,12 @@ export default async function GET(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     try {
       const result = await sql`
-        select * from products where isdeleted=false;
+        SELECT status FROM cafe_status
       `;
 
-      return res.status(200).json(result.rows);
+      return res.status(200).json(result.rows[0]);
     } catch (error) {
-      return res.status(500).json({ message: "Terjadi kesalahan di Server" });
+      return res.status(500).json({ error: "terjadi error di server" });
     }
-  } else {
-    return res.status(405).end(`method ${req.method} tidak diizinkan`);
   }
 }

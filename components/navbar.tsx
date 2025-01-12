@@ -18,7 +18,7 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 import { useSession, signOut } from "next-auth/react";
-import { CircleUser, LogOut, Settings, User, ShoppingCart } from "lucide-react";
+import { CircleUser, LogOut, Coffee, User, ShoppingCart } from "lucide-react";
 
 import ThemeSwitcher from "./switcher";
 
@@ -28,10 +28,9 @@ export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { data: session } = useSession();
   const { state } = useCart();
-  const cartItemCount = state.items.reduce(
-    (total, item) => total + item.quantity,
-    0,
-  );
+  const cartItemCount = Array.isArray(state.items)
+    ? state.items.reduce((total, item) => total + item.quantity, 0)
+    : 0;
 
   const menuItems = [
     { name: "Home", href: "/" },
@@ -92,21 +91,23 @@ export default function Navigation() {
                   radius="full"
                   variant="flat"
                 >
-                  <span>{session.user?.name?.split(" ")[0]}</span>
+                  <span>{session.user?.name}</span>
                 </Button>
               </DropdownTrigger>
               <DropdownMenu aria-label="User menu actions" color="warning">
                 <DropdownItem
                   key="profile"
+                  href="/account/profile"
                   startContent={<User className="w-4 h-4" />}
                 >
                   Profile
                 </DropdownItem>
                 <DropdownItem
-                  key="settings"
-                  startContent={<Settings className="w-4 h-4" />}
+                  key="orders"
+                  href="/orders"
+                  startContent={<Coffee className="w-4 h-4" />}
                 >
-                  Settings
+                  Orders
                 </DropdownItem>
                 <DropdownItem
                   key="logout"
@@ -170,16 +171,24 @@ export default function Navigation() {
         <NavbarMenuItem>
           {session ? (
             <>
-              <Link className="w-full text-lg py-2" color="foreground" href="/">
+              <Link
+                className="w-full text-lg py-2"
+                color="foreground"
+                href="/account/profile"
+              >
                 Profile
               </Link>
-              <Link className="w-full text-lg py-2" color="foreground" href="/">
-                Settings
+              <Link
+                className="w-full text-lg py-2"
+                color="foreground"
+                href="/orders"
+              >
+                My Orders
               </Link>
               <Button
                 className="w-full py-2 font-semibold mt-2"
                 color="danger"
-                onPress={handleLogout}
+                onPress={() => handleLogout()}
               >
                 Log Out
               </Button>

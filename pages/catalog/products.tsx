@@ -14,6 +14,7 @@ import {
 } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { ShoppingCart } from "lucide-react";
 
 import Navigation from "@/components/navbar";
 import { ProductCategory } from "@/types/category";
@@ -49,6 +50,46 @@ export default function ProductsPage() {
   const { dispatch } = useCart();
   const { handleAddToCart } = useCartApi();
   const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState("");
+
+  const getStatusClass = () => {
+    switch (status) {
+      case "Sepi":
+        return "bg-green-100 text-green-700"; // Danger
+      case "Ramai":
+        return "bg-yellow-100 text-yellow-700"; // Warning
+      case "Penuh":
+        return "bg-red-100 text-red-700"; // Success
+      default:
+        return "bg-gray-100 text-gray-700"; // Default
+    }
+  };
+
+  const statusCafe = () => {
+    switch (status) {
+      case "Sepi":
+        return "Silakan order bisa makan ditempat";
+      case "Ramai":
+        return "Kondisi warkop ramai berkemungkinan tidak bisa makan ditempat disarkan takeaway";
+      case "Penuh":
+        return "Kondisi warkop full harap takeaway";
+      default:
+        return "kondisi cafe tidak tersedia";
+    }
+  };
+
+  const fetchStatus = async () => {
+    try {
+      const response = await fetch("/api/status");
+      const result = await response.json();
+
+      setStatus(result.status);
+    } catch (error) {
+      return error;
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchProducts = async () => {
     try {
@@ -67,6 +108,7 @@ export default function ProductsPage() {
 
   useEffect(() => {
     fetchProducts();
+    fetchStatus();
   }, []);
 
   const addToCart = async (product: Product) => {
@@ -93,36 +135,41 @@ export default function ProductsPage() {
 
     return products.map((product) => {
       return (
-        <Card key={product.product_id}>
+        <Card
+          key={product.product_id}
+          className="hover:shadow-lg transition-shadow w-[355px]"
+        >
           <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
             <h4 className="font-bold text-large">{product.name}</h4>
-            <p className="text-tiny uppercase font-bold">
+            <small className="text-default-500">Kopi</small>
+            <p className="text-tiny uppercase font-bold text-warning-600">
               Rp {product.price.toLocaleString()}
             </p>
           </CardHeader>
           <CardBody className="overflow-visible py-2">
             <Image
               alt={product.name}
-              className="object-cover rounded-xl"
+              className="object-cover rounded-xl hover:scale-105 transition-transform"
               height={300}
               src={product.image_url}
               width={300}
             />
           </CardBody>
-          <CardFooter className="flex-col items-start">
-            <p className="text-default-500">{product.description}</p>
+          <CardFooter className="flex flex-col gap-2">
             {product.stock ? (
               <Button
                 fullWidth
-                className="mt-4"
+                className="hover:opacity-90"
                 color="warning"
+                startContent={<ShoppingCart className="w-4 h-4" />}
+                variant="solid"
                 onPress={
                   session
                     ? () => addToCart(product)
                     : () => router.push("/account/login")
                 }
               >
-                Pesan Sekarang
+                Tambahkan ke Cart
               </Button>
             ) : (
               <Button fullWidth isDisabled className="mt-4" color="default">
@@ -151,8 +198,13 @@ export default function ProductsPage() {
             </div>
           </div>
         </section>
-
-        <section className="w-full py-12 md:py-24 lg:py-32">
+        <section className=" rounded-lg mx-24">
+          <div className={`mt-4 p-4 rounded shadow ${getStatusClass()}`}>
+            <h4 className="font-semibold">{status}</h4>
+            <p>{statusCafe()}</p>
+          </div>
+        </section>
+        <section className="w-full pb-12 md:py-24 lg:pb-32">
           <div className="container mx-auto px-4 md:px-6">
             <Tabs
               aria-label="Product categories"

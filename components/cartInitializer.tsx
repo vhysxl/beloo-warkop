@@ -19,7 +19,12 @@ export function CartInitializer() {
             type: "SET_CART",
             payload: data,
           });
-        } catch (error) {}
+        } catch (error) {
+          dispatch({
+            type: "SET_CART",
+            payload: [],
+          });
+        }
       };
 
       fetchCart();

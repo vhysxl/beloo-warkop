@@ -58,7 +58,7 @@ export default async function HANDLER(
         `;
         }
 
-        return res.status(200).json({ message: "success" });
+        return res.status(200).json({ message: "sukses" });
       } catch (error) {}
       break;
 
@@ -70,9 +70,11 @@ export default async function HANDLER(
             DELETE FROM cart_items WHERE product_id=${product_id};
           `;
 
-            return res.status(200).json({ message: "success" });
+            return res.status(200).json({ message: "sukses" });
           } catch (error) {
-            return res.status(500).json({ message: "server failure" });
+            return res
+              .status(500)
+              .json({ message: "Kegagalan di sisi server" });
           }
         }
       }

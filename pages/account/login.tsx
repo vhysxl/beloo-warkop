@@ -46,6 +46,18 @@ export default function Login() {
       return;
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      setStatusMessage({
+        type: "error",
+        children: "Email yang dimasukan tidak valid 🤦‍♂️",
+      });
+      setIsLoading(false);
+
+      return;
+    }
+
     try {
       const result = await signIn("credentials", {
         email,
@@ -65,7 +77,7 @@ export default function Login() {
           err instanceof Error ? err.message : "Terjadi kesalahan sistem 😥",
       });
     } finally {
-      router.push("/");
+      setIsLoading(false);
     }
   };
 
@@ -125,7 +137,6 @@ export default function Login() {
                     isDisabled={isLoading}
                     label="Email"
                     placeholder="Masukkan email Anda"
-                    type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />

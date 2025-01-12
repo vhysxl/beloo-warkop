@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Card,
@@ -9,13 +9,16 @@ import {
 } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 import Navigation from "@/components/navbar";
 import Footer from "@/components/footer";
+import { Product } from "@/types/product";
 
 export default function Home() {
   const { data: session } = useSession();
   const router = useRouter();
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
 
   const handleOrderClick = () => {
     if (session) {
@@ -23,6 +26,50 @@ export default function Home() {
     } else {
       router.push("/account/login");
     }
+  };
+
+  useEffect(() => {
+    const fetchFeaturedProducts = async () => {
+      try {
+        const response = await fetch("/api/featured");
+        const result = await response.json();
+
+        setFeaturedProducts(result);
+      } catch (error) {
+        return error;
+      }
+    };
+
+    fetchFeaturedProducts();
+  }, []);
+
+  const renderFeaturedProducts = () => {
+    return featuredProducts.map((product) => {
+      return (
+        <Card key={product.product_id}>
+          <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+            <h4 className="font-bold text-large">{product.name}</h4>
+            <p className="text-tiny uppercase font-bold">
+              Rp {product.price.toLocaleString()}
+            </p>
+          </CardHeader>
+          <CardBody className="overflow-visible py-2">
+            <Image
+              alt={product.name}
+              className="object-cover rounded-xl"
+              height={400}
+              src={product.image_url}
+              width={500}
+            />
+          </CardBody>
+          <CardFooter>
+            <Button fullWidth color="warning" onPress={handleOrderClick}>
+              Pesan Sekarang
+            </Button>
+          </CardFooter>
+        </Card>
+      );
+    });
   };
 
   return (
@@ -55,63 +102,7 @@ export default function Home() {
               {session ? "Rekomendasi Untukmu" : "Minuman Favorit"}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <Card>
-                <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                  <h4 className="font-bold text-large">Vanilla Latte</h4>
-                </CardHeader>
-                <CardBody className="overflow-visible py-2">
-                  <Image
-                    alt="Vanilla Latte"
-                    className="object-cover rounded-xl"
-                    height={300}
-                    src=""
-                    width={300}
-                  />
-                </CardBody>
-                <CardFooter>
-                  <Button fullWidth color="warning" onPress={handleOrderClick}>
-                    Pesan Sekarang
-                  </Button>
-                </CardFooter>
-              </Card>
-              <Card>
-                <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                  <h4 className="font-bold text-large">Kopi Beloo</h4>
-                </CardHeader>
-                <CardBody className="overflow-visible py-2">
-                  <Image
-                    alt="Kopi Beloo"
-                    className="object-cover rounded-xl"
-                    height={300}
-                    src="/"
-                    width={300}
-                  />
-                </CardBody>
-                <CardFooter>
-                  <Button fullWidth color="warning" onPress={handleOrderClick}>
-                    Pesan Sekarang
-                  </Button>
-                </CardFooter>
-              </Card>
-              <Card>
-                <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                  <h4 className="font-bold text-large">Kopi Maxwin</h4>
-                </CardHeader>
-                <CardBody className="overflow-visible py-2">
-                  <Image
-                    alt="Kopi Maxwin"
-                    className="object-cover rounded-xl"
-                    height={300}
-                    src="/"
-                    width={300}
-                  />
-                </CardBody>
-                <CardFooter>
-                  <Button fullWidth color="warning" onPress={handleOrderClick}>
-                    Pesan Sekarang
-                  </Button>
-                </CardFooter>
-              </Card>
+              {renderFeaturedProducts()}
             </div>
           </div>
         </section>

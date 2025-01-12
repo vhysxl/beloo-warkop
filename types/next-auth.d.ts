@@ -12,6 +12,14 @@ declare module "next-auth" {
       password: string;
       name: string;
       image: string;
+      telepon: number;
     };
+  }
+
+  interface User {
+    id: string;
+    email: string;
+    name: string;
+    telepon: number;
   }
 }

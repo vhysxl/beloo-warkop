@@ -1,24 +1,6 @@
-import {
-  Card,
-  CardBody,
-  Image,
-  Accordion,
-  AccordionItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  Button,
-} from "@nextui-org/react";
+import { Card, CardBody, Image } from "@nextui-org/react";
 import { motion } from "framer-motion";
-import {
-  MapPin,
-  Phone,
-  Mail,
-  Clock,
-  Instagram,
-  Facebook,
-  Twitter,
-} from "lucide-react";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 
 import Navigation from "@/components/navbar";
 
@@ -46,7 +28,7 @@ export default function TentangKamiBeloo() {
               alt="Beloo Warkop"
               className="rounded-lg shadow-lg"
               height={400}
-              src="https://sl.combot.org/niggawhati0_by_fstikbot/webp/1xf09f8c9f.webp"
+              src="https://media.discordapp.net/attachments/710145990597935177/1328032943230160998/2023-05-01.jpg?ex=67853a8f&is=6783e90f&hm=cd12a71f97bdf1ad0d08c463144f0851bb7e96b0b000a16e7cb260b31b1fbc4d&=&format=webp"
               width={600}
             />
           </motion.div>
@@ -58,28 +40,26 @@ export default function TentangKamiBeloo() {
           >
             <Card>
               <CardBody>
-                <h2 className="text-2xl font-semibold mb-4">Cerita Kami</h2>
-                <p className="mb-4">k0P1 3N4k Kh4s JOMOKERTO</p>
+                <h2 className="text-2xl font-semibold mb-4">Tentang Kami</h2>
+                <p className="mb-4">
+                  Selamat datang di Beloo Warkop, destinasi kopi favorit Anda
+                  yang berlokasi di Jl. Pangeran Jayakarta, Harapan Mulya, Medan
+                  Satria, Bekasi. Dikenal dengan kopi berkualitas tinggi dan
+                  suasana yang nyaman, kami menjadi tempat pilihan bagi
+                  mahasiswa, profesional, dan para pecinta kopi. Di Beloo
+                  Warkop, kami berkomitmen untuk meningkatkan pengalaman Anda
+                  dengan menggabungkan tradisi dan inovasi. Melalui website ini,
+                  Anda dapat menjelajahi menu kami, mendapatkan informasi
+                  terbaru tentang acara spesial, dan menikmati kemudahan
+                  pemesanan online. Baik untuk menikmati secangkir kopi cepat
+                  atau bersantai, kami berusaha menjadikan setiap kunjungan Anda
+                  berkesan. Beloo Warkop bukan sekadar kedai kopi – kami adalah
+                  bagian dari komunitas Anda.
+                </p>
               </CardBody>
             </Card>
           </motion.div>
         </div>
-
-        <motion.div
-          animate={{ y: 0, opacity: 1 }}
-          className="mt-12 sm:mt-14 md:mt-16"
-          initial={{ y: 50, opacity: 0 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-        >
-          <Accordion variant="splitted">
-            <AccordionItem key="1" aria-label="Apalah1" title="Apalah 1">
-              <p>Ciye kepo</p>
-            </AccordionItem>
-            <AccordionItem key="2" aria-label="Apalah2" title="Apalah 2">
-              <p>Gada apa2 cok</p>
-            </AccordionItem>
-          </Accordion>
-        </motion.div>
 
         <motion.div
           animate={{ y: 0, opacity: 1 }}
@@ -95,7 +75,7 @@ export default function TentangKamiBeloo() {
                   <MapPin className="text-[#C5A572]" />
                   <span>
                     Jl. Pangeran Jayakarta, Harapan Mulya, Kecamatan Medan
-                    Satria, Kota Bekasi, Jawa Barat 17143
+                    Satria, Kota Bekasi
                   </span>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -111,31 +91,7 @@ export default function TentangKamiBeloo() {
                   <span>Buka setiap hari: 07.00 - 22.00 WIB</span>
                 </div>
               </div>
-              <div className="mt-4 flex space-x-4">
-                <Popover placement="bottom">
-                  <PopoverTrigger>
-                    <Button className="bg-[#C5A572]" color="primary">
-                      Ikuti Kami
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <div className="px-1 py-2">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <Instagram className="text-[#C5A572]" />
-                        <p className="hover:underline">@beleowarkop</p>
-                      </div>
-                      <div className="flex items-center space-x-2 mb-2">
-                        <Facebook className="text-[#C5A572]" />
-                        <p className="hover:underline">Beloo Warkop</p>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Twitter className="text-[#C5A572]" />
-                        <p className="hover:underline">@BeleoWarkop</p>
-                      </div>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </div>
+              <div className="mt-4 flex space-x-4" />
             </CardBody>
           </Card>
         </motion.div>
