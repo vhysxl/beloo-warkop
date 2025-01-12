@@ -9,6 +9,8 @@ import {
   Input,
   RadioGroup,
   Radio,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 import { ShoppingBag, CreditCard } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -37,7 +39,8 @@ export default function Checkout() {
   const [telepon, setTelepon] = useState(
     session?.user?.telepon ? session.user.telepon.toString() : "",
   );
-  const [paymentMethod, setPaymentMethod] = useState("transfer"); // Default: Transfer Bank
+  const [paymentMethod, setPaymentMethod] = useState("transfer");
+  const [type, setType] = useState("makan_disini");
 
   useEffect(() => {
     if (!session) {
@@ -146,7 +149,8 @@ export default function Checkout() {
           telepon,
           nama,
           note,
-          method: paymentMethod, // Tambahkan method pembayaran
+          method: paymentMethod,
+          type,
         }),
       });
 
@@ -212,6 +216,19 @@ export default function Checkout() {
                   variant="bordered"
                   onChange={(e) => setTelepon(e.target.value)}
                 />
+                <Select
+                  defaultSelectedKeys={["makan_disini"]}
+                  label="Opsi Pesanan"
+                  variant="bordered"
+                  onChange={(e) => setType(e.target.value)}
+                >
+                  <SelectItem key="makan_disini" value="makan_disini">
+                    Makan disini
+                  </SelectItem>
+                  <SelectItem key="takeaway" value="takeaway">
+                    Takeaway
+                  </SelectItem>
+                </Select>
               </CardBody>
             </Card>
             {statusMessage.type === "errorOrder" && (

@@ -19,10 +19,10 @@ export default async function ORDER(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case "POST":
       try {
-        const { cartItems, total, user_id, telepon, nama, note, method } =
+        const { cartItems, total, user_id, telepon, nama, note, method, type } =
           req.body;
 
-        if (!cartItems || !total || !telepon || !nama || !method) {
+        if (!cartItems || !total || !telepon || !nama || !method || !type) {
           return res
             .status(400)
             .json({ message: "Data tidak valid, tidak bisa membuat order" });
@@ -33,8 +33,8 @@ export default async function ORDER(req: NextApiRequest, res: NextApiResponse) {
 
         try {
           const create_order = await sql`
-            INSERT INTO orders (user_id, total_amount, notes, name, phone, method) VALUES
-            (${user_id}, ${total}, ${note}, ${nama}, ${telepon}, ${method}) RETURNING order_id
+            INSERT INTO orders (user_id, total_amount, notes, name, phone, method, order_type) VALUES
+            (${user_id}, ${total}, ${note}, ${nama}, ${telepon}, ${method}, ${type}) RETURNING order_id
           `;
 
           const order_id = create_order.rows[0].order_id;

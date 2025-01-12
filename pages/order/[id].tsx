@@ -13,7 +13,7 @@ import {
   Chip,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Package, Clock, CircleDollarSign, CreditCard } from "lucide-react";
+import { Package, Clock, Utensils, CreditCard } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 
@@ -131,17 +131,17 @@ export default function OrderDetailPage() {
                 <CreditCard className="w-5 h-5" />
                 <h3 className="text-lg font-semibold">Metode Pembayaran</h3>
               </div>
-              <p className="capitalize">{order?.method || "Belum dipilih"}</p>
+              <p className="capitalize text-success">
+                {order?.method || "Belum dipilih"}
+              </p>
             </Card>
 
             <Card className="p-4">
               <div className="flex items-center gap-3 mb-3">
-                <CircleDollarSign className="w-5 h-5" />
-                <h3 className="text-lg font-semibold">Total Pembayaran</h3>
+                <Utensils className="w-5 h-5" />
+                <h3 className="text-lg font-semibold">Tipe Order</h3>
               </div>
-              <p className="font-semibold">
-                Rp {order?.total_amount && order?.total_amount}
-              </p>
+              <p className="font-semibold text-warning">{order?.order_type}</p>
             </Card>
           </div>
 

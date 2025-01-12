@@ -70,7 +70,7 @@ export default function ProductsPage() {
       case "Sepi":
         return "Silakan order bisa makan ditempat";
       case "Ramai":
-        return "Kondisi warkop ramai berkemungkinan tidak bisa makan ditempat disarkan takeaway";
+        return "Kondisi warkop ramai berkemungkinan tidak bisa makan ditempat disarankan takeaway";
       case "Penuh":
         return "Kondisi warkop full harap takeaway";
       default:

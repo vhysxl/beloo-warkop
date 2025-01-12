@@ -14,6 +14,7 @@ export interface Order {
   order_items: OrderItem[];
   created_at: Date;
   updated_at: Date;
+  order_type: string;
 }
 
 // Interface untuk detail pesanan
