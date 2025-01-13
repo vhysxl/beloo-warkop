@@ -137,7 +137,7 @@ export default function ProductsPage() {
       return (
         <Card
           key={product.product_id}
-          className="hover:shadow-lg transition-shadow w-[355px]"
+          className="hover:shadow-lg transition-shadow w-full"
         >
           <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
             <h4 className="font-bold text-large">{product.name}</h4>
