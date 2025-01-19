@@ -96,6 +96,8 @@ export default function ProductsPage() {
       const response = await fetch("/api/products");
       const result = await response.json();
 
+      console.log(result);
+
       const grouped = groupProductsByCategory(result);
 
       setGroupedProducts(grouped);
@@ -141,7 +143,6 @@ export default function ProductsPage() {
         >
           <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
             <h4 className="font-bold text-large">{product.name}</h4>
-            <small className="text-default-500">Kopi</small>
             <p className="text-tiny uppercase font-bold text-warning-600">
               Rp {product.price.toLocaleString()}
             </p>
